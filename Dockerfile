@@ -3,9 +3,8 @@ FROM python:3.11-slim-bullseye AS release
 ENV WORKSPACE_ROOT=/app/
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV POETRY_VERSION=1.8.3
 ENV DEBIAN_FRONTEND=noninteractive
-ENV POETRY_NO_INTERACTION=1
+ENV UV_LINK_MODE=copy
 
 # Install Google Chrome
 RUN apt-get update -y && \
@@ -27,21 +26,19 @@ RUN apt-get update -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Poetry using pip and clear cache
-RUN pip install --no-cache-dir "poetry==$POETRY_VERSION"
-RUN poetry config installer.max-workers 20
+# Install uv (static binary from the official image).
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 WORKDIR $WORKSPACE_ROOT
 
-# Copy the poetry lock file and pyproject.toml file to install dependencies
-COPY pyproject.toml poetry.lock $WORKSPACE_ROOT
+# Copy the lock file and pyproject.toml first to leverage layer caching.
+COPY pyproject.toml uv.lock $WORKSPACE_ROOT
 
-# Install the dependencies and clear cache
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-root --no-interaction --no-cache --without dev && \
-    poetry self add 'poethepoet[poetry_plugin]' && \
-    rm -rf ~/.cache/pypoetry/cache/ && \
-    rm -rf ~/.cache/pypoetry/artifacts/
+# Install dependencies into the project venv: main + aws groups, without dev.
+RUN uv sync --frozen --no-default-groups --group aws
+
+# Put the project venv on PATH so python/poe/uvicorn resolve without `uv run`.
+ENV PATH="/app/.venv/bin:$PATH"
 
 # Copy the rest of the code.
 COPY . $WORKSPACE_ROOT

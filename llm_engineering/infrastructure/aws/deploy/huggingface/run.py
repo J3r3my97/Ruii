@@ -4,7 +4,7 @@ try:
     from sagemaker.enums import EndpointType
     from sagemaker.huggingface import get_huggingface_llm_image_uri
 except ModuleNotFoundError:
-    logger.warning("Couldn't load SageMaker imports. Run 'poetry install --with aws' to support AWS.")
+    logger.warning("Couldn't load SageMaker imports. Run 'uv sync --group aws' to support AWS.")
 
 from llm_engineering.model.utils import ResourceManager
 from llm_engineering.settings import settings

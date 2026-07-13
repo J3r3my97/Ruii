@@ -28,7 +28,7 @@ To install and run the project locally, you need the following dependencies.
 |------|---------|---------|------------------|
 | pyenv | ≥2.3.36 | Multiple Python versions (optional) | [Install Guide](https://github.com/pyenv/pyenv?tab=readme-ov-file#installation) |
 | Python | 3.11 | Runtime environment | [Download](https://www.python.org/downloads/) |
-| Poetry | >= 1.8.3 and < 2.0 | Package management | [Install Guide](https://python-poetry.org/docs/#installation) |
+| uv | ≥0.4 | Package & environment management | [Install Guide](https://docs.astral.sh/uv/getting-started/installation/) |
 | Docker | ≥27.1.1 | Containerization | [Install Guide](https://docs.docker.com/engine/install/) |
 | AWS CLI | ≥2.15.42 | Cloud management | [Install Guide](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) |
 | Git | ≥2.44.0 | Version control | [Download](https://git-scm.com/downloads) |
@@ -150,62 +150,61 @@ python --version
 
 ### 3. Install Dependencies
 
-The project uses Poetry for dependency management.
+The project uses [uv](https://docs.astral.sh/uv/) for dependency management.
 
-1. Verify Poetry installation:
+1. Verify uv installation:
 
 ```bash
-poetry --version  # Should show Poetry version 1.8.3 or later
+uv --version  # Should show uv 0.4 or later
 ```
 
 2. Set up the project environment and install dependencies:
 
 ```bash
-poetry env use 3.11
-poetry install --without aws
-poetry run pre-commit install
+uv sync
+uv run pre-commit install
 ```
 
 This will:
 
-- Configure Poetry to use Python 3.11
-- Install project dependencies (excluding AWS-specific packages)
+- Create a virtual environment with Python 3.11 (uv provisions it automatically from `.python-version`)
+- Install project dependencies (the default `dev` group; the optional `aws` group is excluded)
 - Set up pre-commit hooks for code verification
 
 ### 4. Activate the Environment
 
 As the task manager, we run all the scripts using [Poe the Poet](https://poethepoet.natn.io/index.html).
 
-1. Start a Poetry shell:
+With uv you can prefix any command with `uv run` (it uses the project environment automatically), or activate the virtual environment once per shell:
 
 ```bash
-poetry shell
+source .venv/bin/activate
 ```
 
-2. Run project commands using Poe the Poet:
+Run project commands using Poe the Poet:
 
 ```bash
-poetry poe ...
+uv run poe ...
 ```
 
 <details>
-<summary>🔧 Troubleshooting Poe the Poet Installation</summary>
+<summary>🔧 Troubleshooting Poe the Poet</summary>
 
 ### Alternative Command Execution
 
-If you're experiencing issues with `poethepoet`, you can still run the project commands directly through Poetry. Here's how:
+If you're experiencing issues with `poethepoet`, you can still run the project commands directly. Here's how:
 
 1. Look up the command definition in `pyproject.toml`
-2. Use `poetry run` with the underlying command
+2. Run the underlying command with `uv run`
 
 #### Example:
 Instead of:
 ```bash
-poetry poe local-infrastructure-up
+uv run poe local-infrastructure-up
 ```
 Use the direct command from pyproject.toml:
 ```bash
-poetry run <actual-command-from-pyproject-toml>
+uv run <actual-command-from-pyproject-toml>
 ```
 Note: All project commands are defined in the [tool.poe.tasks] section of pyproject.toml
 </details>
@@ -312,12 +311,12 @@ When running the project locally, we host a MongoDB and Qdrant database using Do
 
 For ease of use, you can start the whole local development infrastructure with the following command:
 ```bash
-poetry poe local-infrastructure-up
+uv run poe local-infrastructure-up
 ```
 
 Also, you can stop the ZenML server and all the Docker containers using the following command:
 ```bash
-poetry poe local-infrastructure-down
+uv run poe local-infrastructure-down
 ```
 
 > [!WARNING]  
@@ -328,7 +327,7 @@ poetry poe local-infrastructure-down
 
 Start the inference real-time RESTful API:
 ```bash
-poetry poe run-inference-ml-service
+uv run poe run-inference-ml-service
 ```
 
 > [!IMPORTANT]
@@ -375,7 +374,7 @@ Here we quickly present how to deploy the project to AWS and other serverless se
 
 First, reinstall your Python dependencies with the AWS group:
 ```bash
-poetry install --with aws
+uv sync --group aws
 ```
 
 #### AWS SageMaker
@@ -384,13 +383,13 @@ By this point, we expect you to have AWS CLI installed and your AWS CLI and proj
 
 To ensure best practices, we must create a new AWS user restricted to creating and deleting only resources related to AWS SageMaker. Create it by running:
 ```bash
-poetry poe create-sagemaker-role
+uv run poe create-sagemaker-role
 ```
 It will create a `sagemaker_user_credentials.json` file at the root of your repository with your new `AWS_ACCESS_KEY` and `AWS_SECRET_KEY` values. **But before replacing your new AWS credentials, also run the following command to create the execution role (to create it using your admin credentials).**
 
 To create the IAM execution role used by AWS SageMaker to access other AWS resources on our behalf, run the following:
 ```bash
-poetry poe create-sagemaker-execution-role
+uv run poe create-sagemaker-execution-role
 ```
 It will create a `sagemaker_execution_role.json` file at the root of your repository with your new `AWS_ARN_ROLE` value. Add it to your `.env` file.
 
@@ -400,13 +399,13 @@ Once you've updated the `AWS_ACCESS_KEY`, `AWS_SECRET_KEY`, and `AWS_ARN_ROLE` v
 
 We start the training pipeline through ZenML by running the following:
 ```bash
-poetry poe run-training-pipeline
+uv run poe run-training-pipeline
 ```
 This will start the training code using the configs from `configs/training.yaml` directly in SageMaker. You can visualize the results in Comet ML's dashboard.
 
 We start the evaluation pipeline through ZenML by running the following:
 ```bash
-poetry poe run-evaluation-pipeline
+uv run poe run-evaluation-pipeline
 ```
 This will start the evaluation code using the configs from `configs/evaluating.yaml` directly in SageMaker. You can visualize the results in `*-results` datasets saved to your Hugging Face profile.
 
@@ -414,15 +413,15 @@ This will start the evaluation code using the configs from `configs/evaluating.y
 
 To create an AWS SageMaker Inference Endpoint, run:
 ```bash
-poetry poe deploy-inference-endpoint
+uv run poe deploy-inference-endpoint
 ```
 To test it out, run:
 ```bash
-poetry poe test-sagemaker-endpoint
+uv run poe test-sagemaker-endpoint
 ```
 To delete it, run:
 ```bash
-poetry poe delete-inference-endpoint
+uv run poe delete-inference-endpoint
 ```
 
 #### AWS: ML pipelines, artifacts, and containers
@@ -470,11 +469,11 @@ Now, let's explore all the pipelines you can run. From data collection to traini
 
 Before running the data collection ETL, add your own content to crawl. Open `configs/digital_data_etl_template.yaml`, set `user_full_name` to your name, and add your links (Medium, Substack, personal blog, GitHub, etc.) under `links`. Then run the ETL:
 ```bash
-poetry poe run-digital-data-etl
+uv run poe run-digital-data-etl
 ```
 
 > [!WARNING]
-> You must have Chrome (or another Chromium-based browser) installed on your system for LinkedIn and Medium crawlers to work (which use Selenium under the hood). Based on your Chrome version, the Chromedriver will be automatically installed to enable Selenium support. Another option is to run everything using our Docker image if you don't want to install Chrome. For example, to run all the pipelines combined you can run `poetry poe run-docker-end-to-end-data-pipeline`. Note that the command can be tweaked to support any other pipeline.
+> You must have Chrome (or another Chromium-based browser) installed on your system for LinkedIn and Medium crawlers to work (which use Selenium under the hood). Based on your Chrome version, the Chromedriver will be automatically installed to enable Selenium support. Another option is to run everything using our Docker image if you don't want to install Chrome. For example, to run all the pipelines combined you can run `uv run poe run-docker-end-to-end-data-pipeline`. Note that the command can be tweaked to support any other pipeline.
 >
 > If, for any other reason, you don't have a Chromium-based browser installed and don't want to use Docker, you have two other options to bypass this Selenium issue:
 > - Comment out all the code related to Selenium, Chrome and all the links that use Selenium to crawl them (e.g., Medium), such as the `chromedriver_autoinstaller.install()` command from [application.crawlers.base](llm_engineering/application/crawlers/base.py) and other static calls that check for Chrome drivers and Selenium.
@@ -484,39 +483,39 @@ You can also create additional ETL config files and specify one at run time, lik
 
 Run the feature engineering pipeline:
 ```bash
-poetry poe run-feature-engineering-pipeline
+uv run poe run-feature-engineering-pipeline
 ```
 
 Generate the instruct dataset:
 ```bash
-poetry poe run-generate-instruct-datasets-pipeline
+uv run poe run-generate-instruct-datasets-pipeline
 ```
 
 Generate the preference dataset:
 ```bash
-poetry poe run-generate-preference-datasets-pipeline
+uv run poe run-generate-preference-datasets-pipeline
 ```
 
 Run all of the above compressed into a single pipeline:
 ```bash
-poetry poe run-end-to-end-data-pipeline
+uv run poe run-end-to-end-data-pipeline
 ```
 
 ### Utility pipelines
 
 Export the data from the data warehouse to JSON files:
 ```bash
-poetry poe run-export-data-warehouse-to-json
+uv run poe run-export-data-warehouse-to-json
 ```
 
 Import data to the data warehouse from JSON files (by default, it imports the data from the `data/data_warehouse_raw_data` directory):
 ```bash
-poetry poe run-import-data-warehouse-from-json
+uv run poe run-import-data-warehouse-from-json
 ```
 
 Export ZenML artifacts to JSON:
 ```bash
-poetry poe run-export-artifact-to-json-pipeline
+uv run poe run-export-artifact-to-json-pipeline
 ```
 
 This will export the following ZenML artifacts to the `output` folder as JSON files (it will take their latest version):
@@ -531,12 +530,12 @@ You can configure what artifacts to export by tweaking the `configs/export_artif
 
 Run the training pipeline:
 ```bash
-poetry poe run-training-pipeline
+uv run poe run-training-pipeline
 ```
 
 Run the evaluation pipeline:
 ```bash
-poetry poe run-evaluation-pipeline
+uv run poe run-evaluation-pipeline
 ```
 
 > [!WARNING]
@@ -546,17 +545,17 @@ poetry poe run-evaluation-pipeline
 
 Call the RAG retrieval module with a test query:
 ```bash
-poetry poe call-rag-retrieval-module
+uv run poe call-rag-retrieval-module
 ```
 
 Start the inference real-time RESTful API:
 ```bash
-poetry poe run-inference-ml-service
+uv run poe run-inference-ml-service
 ```
 
 Call the inference real-time RESTful API with a test query:
 ```bash
-poetry poe call-inference-ml-service
+uv run poe call-inference-ml-service
 ```
 
 Remember that you can monitor the prompt traces on [Opik](https://www.comet.com/opik).
@@ -568,26 +567,26 @@ Remember that you can monitor the prompt traces on [Opik](https://www.comet.com/
 
 Check or fix your linting issues:
 ```bash
-poetry poe lint-check
-poetry poe lint-fix
+uv run poe lint-check
+uv run poe lint-fix
 ```
 
 Check or fix your formatting issues:
 ```bash
-poetry poe format-check
-poetry poe format-fix
+uv run poe format-check
+uv run poe format-fix
 ```
 
 Check the code for leaked credentials:
 ```bash
-poetry poe gitleaks-check
+uv run poe gitleaks-check
 ```
 
 ### Tests
 
 Run all the tests using the following command:
 ```bash
-poetry poe test
+uv run poe test
 ```
 
 ## 🏃 Run project
@@ -596,39 +595,39 @@ Based on the setup and usage steps described above, assuming the local and cloud
 
 ### Data
 
-1. Collect data: `poetry poe run-digital-data-etl`
+1. Collect data: `uv run poe run-digital-data-etl`
 
-2. Compute features: `poetry poe run-feature-engineering-pipeline`
+2. Compute features: `uv run poe run-feature-engineering-pipeline`
 
-3. Compute instruct dataset: `poetry poe run-generate-instruct-datasets-pipeline`
+3. Compute instruct dataset: `uv run poe run-generate-instruct-datasets-pipeline`
 
-4. Compute preference alignment dataset: `poetry poe run-generate-preference-datasets-pipeline`
+4. Compute preference alignment dataset: `uv run poe run-generate-preference-datasets-pipeline`
 
 ### Training
 
 > [!IMPORTANT]
-> From now on, for these steps to work, you need to properly set up AWS SageMaker, such as running `poetry install --with aws` and filling in the AWS-related environment variables and configs.
+> From now on, for these steps to work, you need to properly set up AWS SageMaker, such as running `uv sync --group aws` and filling in the AWS-related environment variables and configs.
 
-5. SFT fine-tuning Llama 3.1: `poetry poe run-training-pipeline`
+5. SFT fine-tuning Llama 3.1: `uv run poe run-training-pipeline`
 
-6. For DPO, go to `configs/training.yaml`, change `finetuning_type` to `dpo`, and run `poetry poe run-training-pipeline` again
+6. For DPO, go to `configs/training.yaml`, change `finetuning_type` to `dpo`, and run `uv run poe run-training-pipeline` again
 
-7. Evaluate fine-tuned models: `poetry poe run-evaluation-pipeline`
+7. Evaluate fine-tuned models: `uv run poe run-evaluation-pipeline`
 
 ### Inference
 
 > [!IMPORTANT]
-> From now on, for these steps to work, you need to properly set up AWS SageMaker, such as running `poetry install --with aws` and filling in the AWS-related environment variables and configs.
+> From now on, for these steps to work, you need to properly set up AWS SageMaker, such as running `uv sync --group aws` and filling in the AWS-related environment variables and configs.
 
-8. Call only the RAG retrieval module: `poetry poe call-rag-retrieval-module`
+8. Call only the RAG retrieval module: `uv run poe call-rag-retrieval-module`
 
-9. Deploy the LLM Twin microservice to SageMaker: `poetry poe deploy-inference-endpoint`
+9. Deploy the LLM Twin microservice to SageMaker: `uv run poe deploy-inference-endpoint`
 
-10. Test the LLM Twin microservice: `poetry poe test-sagemaker-endpoint`
+10. Test the LLM Twin microservice: `uv run poe test-sagemaker-endpoint`
 
-11. Start end-to-end RAG server: `poetry poe run-inference-ml-service`
+11. Start end-to-end RAG server: `uv run poe run-inference-ml-service`
 
-12. Test RAG server: `poetry poe call-inference-ml-service`
+12. Test RAG server: `uv run poe call-inference-ml-service`
 
 ## 🙏 Acknowledgements
 
