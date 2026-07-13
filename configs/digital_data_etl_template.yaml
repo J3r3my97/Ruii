@@ -1,0 +1,17 @@
+settings:
+  docker:
+    parent_image: 992382797823.dkr.ecr.eu-central-1.amazonaws.com/zenml-rlwlcs:latest
+    skip_build: True
+  orchestrator.sagemaker:
+    synchronous: false
+
+parameters:
+  # This is YOUR twin. Put your own full name here.
+  user_full_name: Jerry # [First Name(s)] [Last Name]
+  # Add the links to your own writing that the twin should learn from.
+  # Supported sources include Medium, Substack, personal blogs, and GitHub repos.
+  links: []
+    # Example:
+    # - https://medium.com/@your-handle/your-article
+    # - https://your-name.substack.com/p/your-post
+    # - https://github.com/your-handle/your-repo

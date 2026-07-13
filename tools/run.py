@@ -71,7 +71,7 @@ Examples:
 )
 @click.option(
     "--etl-config-filename",
-    default="digital_data_etl_paul_iusztin.yaml",
+    default="digital_data_etl_template.yaml",
     help="Filename of the ETL config file.",
 )
 @click.option(
@@ -114,7 +114,7 @@ def main(
     no_cache: bool = False,
     run_end_to_end_data: bool = False,
     run_etl: bool = False,
-    etl_config_filename: str = "digital_data_etl_paul_iusztin.yaml",
+    etl_config_filename: str = "digital_data_etl_template.yaml",
     run_export_artifact_to_json: bool = False,
     run_feature_engineering: bool = False,
     run_generate_instruct_datasets: bool = False,
