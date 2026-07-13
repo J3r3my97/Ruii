@@ -6,7 +6,7 @@ from loguru import logger
 try:
     import boto3
 except ModuleNotFoundError:
-    logger.warning("Couldn't load AWS or SageMaker imports. Run 'poetry install --with aws' to support AWS.")
+    logger.warning("Couldn't load AWS or SageMaker imports. Run 'uv sync --group aws' to support AWS.")
 
 from llm_engineering.settings import settings
 

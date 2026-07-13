@@ -214,14 +214,14 @@ To use the Makefile, ensure you have `make` installed on your system. Then, you 
    ```
    Note: You must provide the ENDPOINT_NAME parameter when deleting an endpoint.
 
-### Poetry Integration
+### uv Integration
 
-This Makefile uses Poetry to manage Python dependencies and run scripts. Ensure you have Poetry installed and have run `poetry install` to set up your project environment.
+This project uses uv to manage Python dependencies and run scripts. Ensure you have uv installed and have run `uv sync` to set up your project environment.
 
 ### Note
 
-- Ensure you have Python and Poetry installed on your system.
-- The Makefile uses Poetry to run Python scripts, ensuring all dependencies are correctly managed.
+- Ensure you have Python and uv installed on your system.
+- Commands are run through uv, ensuring all dependencies are correctly managed.
 - Make sure you have properly configured the AWS CLI and have the necessary permissions to perform these operations.
 - When deleting an endpoint, you must provide the endpoint name as an environment variable.
 

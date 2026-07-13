@@ -6,7 +6,7 @@ from loguru import logger
 try:
     from sagemaker.huggingface import HuggingFaceProcessor
 except ModuleNotFoundError:
-    logger.warning("Couldn't load SageMaker imports. Run 'poetry install --with aws' to support AWS.")
+    logger.warning("Couldn't load SageMaker imports. Run 'uv sync --group aws' to support AWS.")
 
 from llm_engineering import settings
 
