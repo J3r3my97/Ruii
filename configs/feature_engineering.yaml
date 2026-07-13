@@ -6,6 +6,6 @@ settings:
     synchronous: false
     
 parameters:
+  # This is YOUR twin. List the author name(s) whose crawled content to process.
   author_full_names:
-    - Maxime Labonne
-    - Paul Iusztin
+    - Jerry # [First Name(s)] [Last Name]

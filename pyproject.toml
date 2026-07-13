@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "llm-engineering"
 version = "0.1.0"
-description = ""
-authors = ["iusztinpaul <p.b.iusztin@gmail.com>"]
+description = "Ruii — my personal LLM twin."
+authors = ["Jerry <iamjerry1027@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 
@@ -68,13 +68,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
 # Data pipelines
-run-digital-data-etl-alex = "echo 'It is not supported anymore.'"
-run-digital-data-etl-maxime = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename digital_data_etl_maxime_labonne.yaml"
-run-digital-data-etl-paul = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename digital_data_etl_paul_iusztin.yaml"
-run-digital-data-etl = [
-    "run-digital-data-etl-maxime",
-    "run-digital-data-etl-paul",
-]
+run-digital-data-etl = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename digital_data_etl_template.yaml"
 run-feature-engineering-pipeline = "poetry run python -m tools.run --no-cache --run-feature-engineering"
 run-generate-instruct-datasets-pipeline = "poetry run python -m tools.run --no-cache --run-generate-instruct-datasets"
 run-generate-preference-datasets-pipeline = "poetry run python -m tools.run --no-cache --run-generate-preference-datasets"
@@ -93,7 +87,7 @@ run-evaluation-pipeline = "poetry run python -m tools.run --no-cache --run-evalu
 call-rag-retrieval-module = "poetry run python -m tools.rag"
 
 run-inference-ml-service = "poetry run uvicorn tools.ml_service:app --host 0.0.0.0 --port 8000 --reload"
-call-inference-ml-service = "curl -X POST 'http://127.0.0.1:8000/rag' -H 'Content-Type: application/json' -d '{\"query\": \"My name is Paul Iusztin. Could you draft a LinkedIn post discussing RAG systems? I am particularly interested in how RAG works and how it is integrated with vector DBs and LLMs.\"}'"
+call-inference-ml-service = "curl -X POST 'http://127.0.0.1:8000/rag' -H 'Content-Type: application/json' -d '{\"query\": \"Could you draft a LinkedIn post discussing RAG systems? I am particularly interested in how RAG works and how it is integrated with vector DBs and LLMs.\"}'"
 
 # Infrastructure
 ## Local infrastructure

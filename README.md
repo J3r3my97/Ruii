@@ -1,37 +1,22 @@
-<p align='center'><a href='https://www.packtpub.com/en-us/unlock?step=1'><img src='https://static.packt-cdn.com/assets/images/packt+events/finalGH_design_redeem.png'/></a></p>
-
 <div align="center">
-  <h1>👷 LLM Engineer's Handbook</h1>
-  <p class="tagline">Official repository of the <a href="https://www.amazon.com/LLM-Engineers-Handbook-engineering-production/dp/1836200072/">LLM Engineer's Handbook</a> by <a href="https://github.com/iusztinpaul">Paul Iusztin</a> and <a href="https://github.com/mlabonne">Maxime Labonne</a></p>
-  <a href="https://trendshift.io/repositories/12257" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12257" alt="PacktPublishing%2FLLM-Engineers-Handbook | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+  <h1>🧬 Ruii — My LLM Twin</h1>
+  <p class="tagline">An end-to-end system that trains an LLM to write in my own voice, built from my own digital footprint.</p>
 </div>
 </br>
 
-<p align="center">
-  <a href="https://www.amazon.com/LLM-Engineers-Handbook-engineering-production/dp/1836200072/">
-    <img src="images/cover_plus.png" alt="Book cover">
-  </a>
-</p>
+## 🌟 What this is
 
-<p align="center">
-  Find the book on <a href="https://www.amazon.com/LLM-Engineers-Handbook-engineering-production/dp/1836200072/">Amazon</a> or <a href="https://www.packtpub.com/en-us/product/llm-engineers-handbook-9781836200062">Packt</a>
-</p>
+An **LLM Twin** is a personal AI that learns from your own writing (articles, posts, notes, code) and learns to think and write like you. This repo is my hands-on project for building one end-to-end, using production LLM-engineering best practices:
 
-## 🌟 Features
-
-The goal of this book is to create your own end-to-end LLM-based system using best practices:
-
-- 📝 Data collection & generation
-- 🔄 LLM training pipeline
-- 📊 Simple RAG system
+- 📝 Data collection & generation from my own online content
+- 🔄 An LLM fine-tuning pipeline (SFT + preference alignment)
+- 📊 A RAG system over my collected data
 - 🚀 Production-ready AWS deployment
-- 🔍 Comprehensive monitoring
-- 🧪 Testing and evaluation framework
+- 🔍 Monitoring of prompts and traces
+- 🧪 A testing and evaluation framework
 
-You can download and use the final trained model on [Hugging Face](https://huggingface.co/mlabonne/TwinLlama-3.1-8B-DPO).
-
-> [!IMPORTANT]
-> The code in this GitHub repository is actively maintained and may contain updates not reflected in the book. **Always refer to this repository for the latest version of the code.**
+> [!NOTE]
+> This project started from the open-source companion code of the *LLM Engineer's Handbook* and is being adapted into my own personal twin — the book authors' data and course scaffolding have been stripped out so I can plug in my own.
 
 ## 🔗 Dependencies
 
@@ -50,20 +35,18 @@ To install and run the project locally, you need the following dependencies.
 
 ### Cloud services
 
-The code also uses and depends on the following cloud services. For now, you don't have to do anything. We will guide you in the installation and deployment sections on how to use them:
+The code also uses and depends on the following cloud services. You don't have to set them all up to start — the installation and deployment sections below explain when each one is needed.
 
 | Service | Purpose |
 |---------|---------|
 | [HuggingFace](https://huggingface.com/) | Model registry |
-| [Comet ML](https://www.comet.com/site/products/opik/?utm_source=llm_handbook&utm_medium=github&utm_campaign=opik) | Experiment tracker |
-| [Opik](https://www.comet.com/site/products/opik/?utm_source=llm_handbook&utm_medium=github&utm_campaign=opik) | Prompt monitoring |
+| [Comet ML](https://www.comet.com/site/products/opik/) | Experiment tracker |
+| [Opik](https://www.comet.com/site/products/opik/) | Prompt monitoring |
 | [ZenML](https://www.zenml.io/) | Orchestrator and artifacts layer |
 | [AWS](https://aws.amazon.com/) | Compute and storage |
 | [MongoDB](https://www.mongodb.com/) | NoSQL database |
 | [Qdrant](https://qdrant.tech/) | Vector database |
 | [GitHub Actions](https://github.com/features/actions) | CI/CD pipeline |
-
-In the [LLM Engineer's Handbook](https://www.amazon.com/LLM-Engineers-Handbook-engineering-production/dp/1836200072/), Chapter 2 will walk you through each tool. Chapters 10 and 11 provide step-by-step guides on how to set up everything you need.
 
 ## 🗂️ Project Structure
 
@@ -71,7 +54,6 @@ Here is the directory overview:
 
 ```bash
 .
-├── code_snippets/       # Standalone example code
 ├── configs/             # Pipeline configuration files
 ├── llm_engineering/     # Core project package
 │   ├── application/    
@@ -88,7 +70,7 @@ Here is the directory overview:
 │   ├── data_warehouse.py
 ```
 
-`llm_engineering/`  is the main Python package implementing LLM and RAG functionality. It follows Domain-Driven Design (DDD) principles:
+`llm_engineering/` is the main Python package implementing the LLM and RAG functionality. It follows Domain-Driven Design (DDD) principles:
 
 - `domain/`: Core business entities and structures
 - `application/`: Business logic, crawlers, and RAG implementation
@@ -111,23 +93,18 @@ The code logic and imports flow as follows: `infrastructure` → `model` → `ap
 
 `configs/`: ZenML YAML configuration files to control the execution of pipelines and steps.
 
-`code_snippets/`: Independent code examples that can be executed independently.
-
 ## 💻 Installation
-
-> [!NOTE]
-> If you are experiencing issues while installing and running the repository, consider checking the [Issues](https://github.com/PacktPublishing/LLM-Engineers-Handbook/issues) GitHub section for other people who solved similar problems or directly asking us for help.
 
 ### 1. Clone the Repository
 
 Start by cloning the repository and navigating to the project directory:
 
 ```bash
-git clone https://github.com/PacktPublishing/LLM-Engineers-Handbook.git
-cd LLM-Engineers-Handbook 
+git clone https://github.com/J3r3my97/Ruii.git
+cd Ruii
 ```
 
-Next, we have to prepare your Python environment and its adjacent dependencies. 
+Next, we have to prepare the Python environment and its adjacent dependencies.
 
 ### 2. Set Up Python Environment
 
@@ -197,7 +174,7 @@ This will:
 
 ### 4. Activate the Environment
 
-As our task manager, we run all the scripts using [Poe the Poet](https://poethepoet.natn.io/index.html).
+As the task manager, we run all the scripts using [Poe the Poet](https://poethepoet.natn.io/index.html).
 
 1. Start a Poetry shell:
 
@@ -233,13 +210,13 @@ poetry run <actual-command-from-pyproject-toml>
 Note: All project commands are defined in the [tool.poe.tasks] section of pyproject.toml
 </details>
 
-Now, let's configure our local project with all the necessary credentials and tokens to run the code locally.
+Now, let's configure the local project with all the necessary credentials and tokens to run the code locally.
 
 ### 5. Local Development Setup
 
-After you have installed all the dependencies, you must create and fill a `.env` file with your credentials to appropriately interact with other services and run the project. Setting your sensitive credentials in a `.env` file is a good security practice, as this file won't be committed to GitHub or shared with anyone else. 
+After you have installed all the dependencies, you must create and fill a `.env` file with your credentials to appropriately interact with other services and run the project. Setting your sensitive credentials in a `.env` file is a good security practice, as this file won't be committed to GitHub or shared with anyone else.
 
-1. First, copy our example by running the following:
+1. First, copy the example by running the following:
 
 ```bash
 cp .env.example .env # The file must be at your repository's root!
@@ -275,11 +252,11 @@ To authenticate to Comet ML (required only during training) and Opik, you must f
 COMET_API_KEY=your_api_key_here
 ```
 
-→ Check out this [tutorial](https://www.comet.com/docs/opik/?utm_source=llm_handbook&utm_medium=github&utm_campaign=opik) to learn how to get started with Opik. You can also access Opik's dashboard using 🔗[this link](https://www.comet.com/opik?utm_source=llm_handbook&utm_medium=github&utm_content=opik).
+→ Check out this [tutorial](https://www.comet.com/docs/opik/) to learn how to get started with Opik. You can also access Opik's dashboard using 🔗[this link](https://www.comet.com/opik).
 
 ### 6. Deployment Setup
 
-When deploying the project to the cloud, we must set additional settings for Mongo, Qdrant, and AWS. If you are just working locally, the default values of these env vars will work out of the box. Detailed deployment instructions are available in Chapter 11 of the [LLM Engineer's Handbook](https://www.amazon.com/LLM-Engineers-Handbook-engineering-production/dp/1836200072/).
+When deploying the project to the cloud, we must set additional settings for Mongo, Qdrant, and AWS. If you are just working locally, the default values of these env vars will work out of the box.
 
 #### MongoDB
 
@@ -307,7 +284,7 @@ QDRANT_APIKEY=your_qdrant_api_key
 
 For your AWS set-up to work correctly, you need the AWS CLI installed on your local machine and properly configured with an admin user (or a user with enough permissions to create new SageMaker, ECR, and S3 resources; using an admin user will make everything more straightforward).
 
-Chapter 2 provides step-by-step instructions on how to install the AWS CLI, create an admin user on AWS, and get an access key to set up the `AWS_ACCESS_KEY` and `AWS_SECRET_KEY` environment variables. If you already have an AWS admin user in place, you have to configure the following env vars in your `.env` file:
+You'll need the AWS CLI installed and an admin user on AWS with an access key to set up the `AWS_ACCESS_KEY` and `AWS_SECRET_KEY` environment variables. If you already have an AWS admin user in place, you have to configure the following env vars in your `.env` file:
 
 ```bash
 AWS_REGION=eu-central-1 # Change it with your AWS region.
@@ -322,7 +299,7 @@ cat ~/.aws/credentials
 ```
 
 > [!IMPORTANT]
-> Additional configuration options are available in [settings.py](https://github.com/PacktPublishing/LLM-Engineers-Handbook/blob/main/llm_engineering/settings.py). Any variable in the `Settings` class can be configured through the `.env` file. 
+> Additional configuration options are available in [settings.py](llm_engineering/settings.py). Any variable in the `Settings` class can be configured through the `.env` file.
 
 ## 🏗️ Infrastructure
 
@@ -394,7 +371,7 @@ You can search your MongoDB collections using your **IDEs MongoDB plugin** (whic
 
 ### Cloud infrastructure (for production)
 
-Here we will quickly present how to deploy the project to AWS and other serverless services. We won't go into the details (as everything is presented in the book) but only point out the main steps you have to go through.
+Here we quickly present how to deploy the project to AWS and other serverless services. We only point out the main steps you have to go through.
 
 First, reinstall your Python dependencies with the AWS group:
 ```bash
@@ -402,9 +379,6 @@ poetry install --with aws
 ```
 
 #### AWS SageMaker
-
-> [!NOTE]
-> Chapter 10 provides step-by-step instructions in the section "Implementing the LLM microservice using AWS SageMaker".
 
 By this point, we expect you to have AWS CLI installed and your AWS CLI and project's env vars (within the `.env` file) properly configured with an AWS admin user.
 
@@ -418,7 +392,7 @@ To create the IAM execution role used by AWS SageMaker to access other AWS resou
 ```bash
 poetry poe create-sagemaker-execution-role
 ```
-It will create a `sagemaker_execution_role.json` file at the root of your repository with your new `AWS_ARN_ROLE` value. Add it to your `.env` file. 
+It will create a `sagemaker_execution_role.json` file at the root of your repository with your new `AWS_ARN_ROLE` value. Add it to your `.env` file.
 
 Once you've updated the `AWS_ACCESS_KEY`, `AWS_SECRET_KEY`, and `AWS_ARN_ROLE` values in your `.env` file, you can use AWS SageMaker. **Note that this step is crucial to complete the AWS setup.**
 
@@ -453,35 +427,33 @@ poetry poe delete-inference-endpoint
 
 #### AWS: ML pipelines, artifacts, and containers
 
-The ML pipelines, artifacts, and containers are deployed to AWS by leveraging ZenML's deployment features. Thus, you must create an account with ZenML Cloud and follow their guide on deploying a ZenML stack to AWS. Otherwise, we provide step-by-step instructions in **Chapter 11**, section **Deploying the LLM Twin's pipelines to the cloud** on what you must do.  
+The ML pipelines, artifacts, and containers are deployed to AWS by leveraging ZenML's deployment features. Thus, you must create an account with ZenML Cloud and follow their guide on deploying a ZenML stack to AWS.
 
 #### Qdrant & MongoDB
 
-We leverage Qdrant's and MongoDB's serverless options when deploying the project. Thus, you can either follow [Qdrant's](https://qdrant.tech/documentation/cloud/create-cluster/) and [MongoDB's](https://www.mongodb.com/resources/products/fundamentals/mongodb-cluster-setup) tutorials on how to create a freemium cluster for each or go through **Chapter 11**, section **Deploying the LLM Twin's pipelines to the cloud** and follow our step-by-step instructions.
+We leverage Qdrant's and MongoDB's serverless options when deploying the project. Thus, you can follow [Qdrant's](https://qdrant.tech/documentation/cloud/create-cluster/) and [MongoDB's](https://www.mongodb.com/resources/products/fundamentals/mongodb-cluster-setup) tutorials on how to create a freemium cluster for each.
 
 #### GitHub Actions
 
-We use GitHub Actions to implement our CI/CD pipelines. To implement your own, you have to fork our repository and set the following env vars as Actions secrets in your forked repository:
+We use GitHub Actions to implement our CI/CD pipelines. To use your own, set the following env vars as Actions secrets in your repository:
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_ECR_NAME`
 - `AWS_REGION`
 
-Also, we provide instructions on how to set everything up in **Chapter 11**, section **Adding LLMOps to the LLM Twin**.
-
 #### Comet ML & Opik
 
 You can visualize the results on their self-hosted dashboards if you create a Comet account and correctly set the `COMET_API_KEY` env var. As Opik is powered by Comet, you don't have to set up anything else along Comet:
-- [Comet ML (for experiment tracking)](https://www.comet.com/?utm_source=llm_handbook&utm_medium=github&utm_campaign=opik)
-- [Opik (for prompt monitoring)](https://www.comet.com/opik?utm_source=llm_handbook&utm_medium=github&utm_campaign=opik)
+- [Comet ML (for experiment tracking)](https://www.comet.com/)
+- [Opik (for prompt monitoring)](https://www.comet.com/opik)
 
 ### 💰 Running the Project Costs
 
-We will mostly stick to free tiers for all the services except for AWS and OpenAI's API, which are both pay-as-you-go services. The cost of running the project once, with our default values, will be roughly ~$25 (most of it comes from using AWS SageMaker for training and inference).
+We mostly stick to free tiers for all the services except for AWS and OpenAI's API, which are both pay-as-you-go services. The cost of running the project once, with the default values, will be roughly ~$25 (most of it comes from using AWS SageMaker for training and inference).
 
 ## ⚡ Pipelines
 
-All the ML pipelines will be orchestrated behind the scenes by [ZenML](https://www.zenml.io/). A few exceptions exist when running utility scrips, such as exporting or importing from the data warehouse.
+All the ML pipelines will be orchestrated behind the scenes by [ZenML](https://www.zenml.io/). A few exceptions exist when running utility scripts, such as exporting or importing from the data warehouse.
 
 The ZenML pipelines are the entry point for most processes throughout this project. They are under the `pipelines/` folder. Thus, when you want to understand or debug a workflow, starting with the ZenML pipeline is the best approach.
 
@@ -492,11 +464,11 @@ To see the pipelines running and their results:
 - click on a specific run (e.g., `feature_engineering_run_2024_06_20_18_40_24`)
 - click on a specific step or artifact of the DAG to find more details about it
 
-Now, let's explore all the pipelines you can run. From data collection to training, we will present them in their natural order to go through the LLM project end-to-end.
+Now, let's explore all the pipelines you can run. From data collection to training, we present them in their natural order to go through the project end-to-end.
 
 ### Data pipelines
 
-Run the data collection ETL:
+Before running the data collection ETL, add your own content to crawl. Open `configs/digital_data_etl_template.yaml`, set `user_full_name` to your name, and add your links (Medium, Substack, personal blog, GitHub, etc.) under `links`. Then run the ETL:
 ```bash
 poetry poe run-digital-data-etl
 ```
@@ -505,10 +477,10 @@ poetry poe run-digital-data-etl
 > You must have Chrome (or another Chromium-based browser) installed on your system for LinkedIn and Medium crawlers to work (which use Selenium under the hood). Based on your Chrome version, the Chromedriver will be automatically installed to enable Selenium support. Another option is to run everything using our Docker image if you don't want to install Chrome. For example, to run all the pipelines combined you can run `poetry poe run-docker-end-to-end-data-pipeline`. Note that the command can be tweaked to support any other pipeline.
 >
 > If, for any other reason, you don't have a Chromium-based browser installed and don't want to use Docker, you have two other options to bypass this Selenium issue:
-> - Comment out all the code related to Selenium, Chrome and all the links that use Selenium to crawl them (e.g., Medium), such as the `chromedriver_autoinstaller.install()` command from [application.crawlers.base](https://github.com/PacktPublishing/LLM-Engineers-Handbook/blob/main/llm_engineering/application/crawlers/base.py) and other static calls that check for Chrome drivers and Selenium.
-> - Install Google Chrome using your CLI in environments such as GitHub Codespaces or other cloud VMs using the same command as in our [Docker file](https://github.com/PacktPublishing/LLM-Engineers-Handbook/blob/main/Dockerfile#L10).
+> - Comment out all the code related to Selenium, Chrome and all the links that use Selenium to crawl them (e.g., Medium), such as the `chromedriver_autoinstaller.install()` command from [application.crawlers.base](llm_engineering/application/crawlers/base.py) and other static calls that check for Chrome drivers and Selenium.
+> - Install Google Chrome using your CLI in environments such as GitHub Codespaces or other cloud VMs using the same command as in our [Docker file](Dockerfile#L10).
 
-To add additional links to collect from, go to `configs/digital_data_etl_[author_name].yaml` and add them to the `links` field. Also, you can create a completely new file and specify it at run time, like this: `python -m llm_engineering.interfaces.orchestrator.run --run-etl --etl-config-filename configs/digital_data_etl_[your_name].yaml`
+You can also create additional ETL config files and specify one at run time, like this: `python -m llm_engineering.interfaces.orchestrator.run --run-etl --etl-config-filename configs/digital_data_etl_[your_name].yaml`
 
 Run the feature engineering pipeline:
 ```bash
@@ -568,7 +540,7 @@ poetry poe run-evaluation-pipeline
 ```
 
 > [!WARNING]
-> For this to work, make sure you properly configured AWS SageMaker as described in [Set up cloud infrastructure (for production)](#set-up-cloud-infrastructure-for-production).
+> For this to work, make sure you properly configured AWS SageMaker as described in [Cloud infrastructure (for production)](#cloud-infrastructure-for-production).
 
 ### Inference pipelines
 
@@ -620,7 +592,7 @@ poetry poe test
 
 ## 🏃 Run project
 
-Based on the setup and usage steps described above, assuming the local and cloud infrastructure works and the `.env` is filled as expected, follow the next steps to run the LLM system end-to-end:
+Based on the setup and usage steps described above, assuming the local and cloud infrastructure works and the `.env` is filled as expected, follow the next steps to run the system end-to-end:
 
 ### Data
 
@@ -637,7 +609,7 @@ Based on the setup and usage steps described above, assuming the local and cloud
 > [!IMPORTANT]
 > From now on, for these steps to work, you need to properly set up AWS SageMaker, such as running `poetry install --with aws` and filling in the AWS-related environment variables and configs.
 
-5. SFT fine-tuning Llamma 3.1: `poetry poe run-training-pipeline`
+5. SFT fine-tuning Llama 3.1: `poetry poe run-training-pipeline`
 
 6. For DPO, go to `configs/training.yaml`, change `finetuning_type` to `dpo`, and run `poetry poe run-training-pipeline` again
 
@@ -658,6 +630,10 @@ Based on the setup and usage steps described above, assuming the local and cloud
 
 12. Test RAG server: `poetry poe call-inference-ml-service`
 
+## 🙏 Acknowledgements
+
+This project is built on top of the open-source companion code for the *LLM Engineer's Handbook* by Paul Iusztin and Maxime Labonne, released under the MIT license. I've adapted it into my own personal LLM twin.
+
 ## 📄 License
 
-This course is an open-source project released under the MIT license. Thus, as long you distribute our LICENSE and acknowledge our work, you can safely clone or fork this project and use it as a source of inspiration for whatever you want (e.g., university projects, college degree projects, personal projects, etc.).
+This project is released under the MIT license. See [LICENSE](LICENSE) for details.
