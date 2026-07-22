@@ -1,7 +1,7 @@
 [project]
-name = "llm-engineering"
+name = "joe"
 version = "0.1.0"
-description = "Ruii — my personal LLM twin."
+description = "Joe — an autonomous, AI-disclosed persona agent."
 authors = [{ name = "Jerry", email = "iamjerry1027@gmail.com" }]
 requires-python = ">=3.11,<3.12"
 readme = "README.md"
@@ -12,6 +12,9 @@ classifiers = [
 ]
 dependencies = [
     "zenml[server]==0.74.0",
+    # zenml imports pkg_resources at runtime; uv venvs omit setuptools by default,
+    # and setuptools>=81 removed the bundled pkg_resources — so pin below that.
+    "setuptools>=70,<80",
     "pymongo>=4.6.2,<5",
     "click>=8.0.1,<9",
     "loguru>=0.7.2,<0.8",
@@ -37,6 +40,8 @@ dependencies = [
     "fastapi>=0.100,<=0.110",
     "uvicorn>=0.30.6,<0.31",
     "opik>=0.2.2,<0.3",
+    "openai>=1.40,<2",
+    "pydantic-settings>=2.0,<3",
 ]
 
 [dependency-groups]
@@ -81,11 +86,9 @@ run-import-data-warehouse-from-json = "python -m tools.data_warehouse --import-r
 run-training-pipeline = "python -m tools.run --no-cache --run-training"
 run-evaluation-pipeline = "python -m tools.run --no-cache --run-evaluation"
 
-# Inference
+# Agent (Joe) — see joe/ package
+joe-chat = "python -m tools.joe chat"
 call-rag-retrieval-module = "python -m tools.rag"
-
-run-inference-ml-service = "uvicorn tools.ml_service:app --host 0.0.0.0 --port 8000 --reload"
-call-inference-ml-service = "curl -X POST 'http://127.0.0.1:8000/rag' -H 'Content-Type: application/json' -d '{\"query\": \"Could you draft a LinkedIn post discussing RAG systems? I am particularly interested in how RAG works and how it is integrated with vector DBs and LLMs.\"}'"
 
 # Infrastructure
 ## Local infrastructure
@@ -110,17 +113,14 @@ zenml-server-disconnect = "zenml disconnect"
 export-settings-to-zenml = "python -m tools.run --export-settings"
 delete-settings-zenml = "zenml secret delete settings"
 
-## SageMaker
+## SageMaker (roles for the dormant training / evaluation pipelines)
 create-sagemaker-role = "python -m llm_engineering.infrastructure.aws.roles.create_sagemaker_role"
 create-sagemaker-execution-role = "python -m llm_engineering.infrastructure.aws.roles.create_execution_role"
-deploy-inference-endpoint = "python -m llm_engineering.infrastructure.aws.deploy.huggingface.run"
-test-sagemaker-endpoint = "python -m llm_engineering.model.inference.test"
-delete-inference-endpoint = "python -m llm_engineering.infrastructure.aws.deploy.delete_sagemaker_endpoint"
 
 ## Docker
-build-docker-image = "docker buildx build --platform linux/amd64 -t llmtwin -f Dockerfile ."
-run-docker-end-to-end-data-pipeline = "docker run --rm --network host --shm-size=2g --env-file .env llmtwin python -m tools.run --no-cache --run-end-to-end-data"
-bash-docker-container = "docker run --rm -it --network host --env-file .env llmtwin bash"
+build-docker-image = "docker buildx build --platform linux/amd64 -t joe-pipelines -f Dockerfile ."
+run-docker-end-to-end-data-pipeline = "docker run --rm --network host --shm-size=2g --env-file .env joe-pipelines python -m tools.run --no-cache --run-end-to-end-data"
+bash-docker-container = "docker run --rm -it --network host --env-file .env joe-pipelines bash"
 
 # QA
 lint-check = "ruff check ."

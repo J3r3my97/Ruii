@@ -1,10 +1,13 @@
 <div align="center">
-  <h1>🧬 Ruii — My LLM Twin</h1>
-  <p class="tagline">An end-to-end system that trains an LLM to write in my own voice, built from my own digital footprint.</p>
+  <h1>🎭 Joe — Autonomous Persona Agent</h1>
+  <p class="tagline">A fully fictional, AI-disclosed character running on a local model — one you can chat with, and that drafts posts and replies for X and Reddit behind a human approval queue.</p>
 </div>
 </br>
 
-## 🌟 What this is
+> [!IMPORTANT]
+> **This repo is being repurposed.** It began as an LLM Twin (below) built on the *LLM Engineer's Handbook* companion code, and is now being reshaped into **Joe**, an autonomous persona agent. New runtime code lives in the `joe/` package and speaks an OpenAI-compatible chat API (Ollama on a Mac for dev, vLLM on a GPU VPC later). The original data, RAG, and fine-tuning pipelines under `llm_engineering/` are kept — the fine-tuning path is dormant, reserved for later voice-tuning. See the plan for the full roadmap.
+
+## 🌟 What this is (original LLM Twin)
 
 An **LLM Twin** is a personal AI that learns from your own writing (articles, posts, notes, code) and learns to think and write like you. This repo is my hands-on project for building one end-to-end, using production LLM-engineering best practices:
 
@@ -473,7 +476,7 @@ uv run poe run-digital-data-etl
 ```
 
 > [!WARNING]
-> You must have Chrome (or another Chromium-based browser) installed on your system for LinkedIn and Medium crawlers to work (which use Selenium under the hood). Based on your Chrome version, the Chromedriver will be automatically installed to enable Selenium support. Another option is to run everything using our Docker image if you don't want to install Chrome. For example, to run all the pipelines combined you can run `uv run poe run-docker-end-to-end-data-pipeline`. Note that the command can be tweaked to support any other pipeline.
+> You must have Chrome (or another Chromium-based browser) installed on your system for the Medium crawler to work (which uses Selenium under the hood). Based on your Chrome version, the Chromedriver will be automatically installed to enable Selenium support. Another option is to run everything using our Docker image if you don't want to install Chrome. For example, to run all the pipelines combined you can run `uv run poe run-docker-end-to-end-data-pipeline`. Note that the command can be tweaked to support any other pipeline.
 >
 > If, for any other reason, you don't have a Chromium-based browser installed and don't want to use Docker, you have two other options to bypass this Selenium issue:
 > - Comment out all the code related to Selenium, Chrome and all the links that use Selenium to crawl them (e.g., Medium), such as the `chromedriver_autoinstaller.install()` command from [application.crawlers.base](llm_engineering/application/crawlers/base.py) and other static calls that check for Chrome drivers and Selenium.

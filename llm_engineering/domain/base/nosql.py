@@ -130,6 +130,17 @@ class NoSQLBaseDocument(BaseModel, Generic[T], ABC):
             return []
 
     @classmethod
+    def collection(cls: Type[T]):
+        """Return the raw pymongo collection for this document type.
+
+        Escape hatch for operations the base class does not wrap (sorted reads,
+        atomic updates, indexes) so callers can build on the same connection
+        without duplicating plumbing.
+        """
+
+        return _database[cls.get_collection_name()]
+
+    @classmethod
     def get_collection_name(cls: Type[T]) -> str:
         if not hasattr(cls, "Settings") or not hasattr(cls.Settings, "name"):
             raise ImproperlyConfigured(

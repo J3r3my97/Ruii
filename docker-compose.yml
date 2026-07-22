@@ -1,7 +1,7 @@
 services:
   mongo:
     image: mongo:latest
-    container_name: "llm_engineering_mongo"
+    container_name: "joe_mongo"
     logging:
       options:
         max-size: 1g
@@ -18,7 +18,7 @@ services:
 
   qdrant:
     image: qdrant/qdrant:latest
-    container_name: "llm_engineering_qdrant"
+    container_name: "joe_qdrant"
     ports:
       - 6333:6333
       - 6334:6334
