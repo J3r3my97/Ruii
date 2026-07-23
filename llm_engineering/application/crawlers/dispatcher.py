@@ -6,7 +6,6 @@ from loguru import logger
 from .base import BaseCrawler
 from .custom_article import CustomArticleCrawler
 from .github import GithubCrawler
-from .linkedin import LinkedInCrawler
 from .medium import MediumCrawler
 
 
@@ -22,11 +21,6 @@ class CrawlerDispatcher:
 
     def register_medium(self) -> "CrawlerDispatcher":
         self.register("https://medium.com", MediumCrawler)
-
-        return self
-
-    def register_linkedin(self) -> "CrawlerDispatcher":
-        self.register("https://linkedin.com", LinkedInCrawler)
 
         return self
 
